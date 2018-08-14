@@ -2,6 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:oystercard) { described_class.new }    # subject(:oystercard) { Oystercard.new }
+  # subject2(:toppedUpOyster) {described_class.new(50) }
   let(:mockBalance) { double :balance }
   let(:mockAmount) { double :amount }
   let(:mockFare) { double :fare }
@@ -9,6 +10,9 @@ describe Oystercard do
   describe '#initialize' do
     it 'defaults with a balance of £0' do
       expect(subject.balance).to eq 0
+    end
+    it 'defaults with @in_journey as false' do 
+      expect(subject.in_journey).to be false
     end
   end
 
@@ -26,14 +30,44 @@ describe Oystercard do
   describe '#deduct' do 
     it { is_expected.to respond_to(:deduct) }
     it 'deducts fare from balance' do
-      # subject.top_up(25)
-      # testFare = 2
-      # expect(subject.deduct(testFare)).to eq 23
       allow(subject).to receive(:top_up).and_return(mockAmount)    # subject.top_up(25)
       allow(subject).to receive(:deduct).and_return(mockBalance)   # testFare = 2
       expect(subject.deduct(mockFare)).to eq(mockBalance)          # expect(subject.deduct(testFare)).to eq 23
     end
   end
+
+  describe '#touch_in' do
+    it { is_expected.to respond_to (:touch_in) }
+    it 'toggles #in_journey? to true' do 
+      subject.top_up(10)
+      expect(subject.touch_in).to eq true
+    end
+    it 'denies #touch_in when @balance < MIN.FARE' do
+      expect { subject.touch_in }.to raise_error 'Error - insufficient funds'
+    end
+  end
+
+  describe '#touch_out' do 
+    it 'toggles #in_journey? to false' do 
+      expect(subject.touch_out).to eq false
+    end 
+  end
+
+  describe '#in_journey?' do 
+    it 'tracks card status after #touch_in' do 
+      subject.top_up(10)
+      subject.touch_in  # allow(subject).to receive(:touch_in)
+      expect(subject.in_journey?).to eq true 
+    end
+    it 'tracks card status after #touch_out' do 
+      subject.top_up(10)
+      subject.touch_in    # allow(subject).to receive(:touch_in)
+      subject.touch_out    # allow(subject).to receive(:touch_out)#.and_return(false) # Ask Mark about spies.  How do we isolate in_journey?
+      expect(subject.in_journey?).to eq false
+    end
+  end
+    
+
 
 
 end
