@@ -19,10 +19,6 @@ MAXIMUM_BALANCE = 90
     @balance += amount
   end
 
-  def deduct(fare)
-    @balance -= fare 
-  end
-
   def touch_in
     fail 'Error - insufficient funds' if balance < MINIMUM_FARE
     @in_journey = true 
@@ -30,9 +26,12 @@ MAXIMUM_BALANCE = 90
 
   def touch_out
     @in_journey = false
+    @balance -= MINIMUM_FARE
+  end
+
+  private
+  def deduct(fare)
+    @balance -= fare 
   end
 
 end
-
-
-# TEST

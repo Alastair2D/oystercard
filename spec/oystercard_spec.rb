@@ -27,14 +27,13 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do 
-    it { is_expected.to respond_to(:deduct) }
-    it 'deducts fare from balance' do
-      allow(subject).to receive(:top_up).and_return(mockAmount)    # subject.top_up(25)
-      allow(subject).to receive(:deduct).and_return(mockBalance)   # testFare = 2
-      expect(subject.deduct(mockFare)).to eq(mockBalance)          # expect(subject.deduct(testFare)).to eq 23
-    end
-  end
+  # describe '#deduct' do 
+  #   it 'deducts fare from balance' do
+  #     allow(subject).to receive(:top_up).and_return(mockAmount)    # subject.top_up(25)
+  #     allow(subject).to receive(:deduct).and_return(mockBalance)   # testFare = 2
+  #     expect(subject.deduct(mockFare)).to eq(mockBalance)          # expect(subject.deduct(testFare)).to eq 23
+  #   end
+  # end
 
   describe '#touch_in' do
     it { is_expected.to respond_to (:touch_in) }
@@ -48,21 +47,19 @@ describe Oystercard do
   end
 
   describe '#touch_out' do 
-    it 'toggles #in_journey? to false' do 
-      expect(subject.touch_out).to eq false
-    end 
+    it 'deducts correct fare from balance' do
+      expect { subject.touch_out }.to change { subject.balance }.by(-Oystercard::MINIMUM_FARE)
+    end
+
   end
 
   describe '#in_journey?' do 
+    before {subject.top_up(10) ; subject.touch_in}
     it 'tracks card status after #touch_in' do 
-      subject.top_up(10)
-      subject.touch_in  # allow(subject).to receive(:touch_in)
       expect(subject.in_journey?).to eq true 
     end
     it 'tracks card status after #touch_out' do 
-      subject.top_up(10)
-      subject.touch_in    # allow(subject).to receive(:touch_in)
-      subject.touch_out    # allow(subject).to receive(:touch_out)#.and_return(false) # Ask Mark about spies.  How do we isolate in_journey?
+      subject.touch_out # Ask Mark about spies. 
       expect(subject.in_journey?).to eq false
     end
   end
