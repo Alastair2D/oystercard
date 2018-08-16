@@ -33,6 +33,7 @@ MAXIMUM_BALANCE = 90
   def touch_out(station)
     @balance -= MINIMUM_FARE
     @journey_log["Exit"] = station
+    # journey_instance.store_journey(entry_station, exit_station)
     @entry_station = nil
     @exit_station
   end
