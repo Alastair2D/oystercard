@@ -29,7 +29,7 @@ def top_up_card
 end
 
 def touch_in
-    @o1.touch_in
+    @o1.touch_in('station')
 end
 
 def deducts_correct_fare_on_touch_out
