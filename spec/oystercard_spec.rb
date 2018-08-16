@@ -30,10 +30,10 @@ describe Oystercard do
 
   describe '#touch_in' do
     it { is_expected.to respond_to (:touch_in) }
-    it 'toggles #in_journey? to true' do 
-      subject.top_up(10)
-      expect(subject.touch_in(mockEntryStation)).to eq true
-    end
+    # it 'toggles #in_journey? to true' do 
+    #   subject.top_up(10)
+    #   expect(subject.touch_in(mockEntryStation)).to eq true
+    # end
     it 'denies #touch_in when @balance < MIN.FARE' do
       expect { subject.touch_in(mockEntryStation) }.to raise_error 'Error - insufficient funds'
     end
