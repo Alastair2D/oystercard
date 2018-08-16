@@ -7,6 +7,7 @@ describe Oystercard do
   let(:mockAmount) { double :amount }
   let(:mockFare) { double :fare }
   let(:mockEntryStation) { double :entrystation }
+  let(:mockExitStation) { double :exitstation }
  
   describe '#initialize' do
     it 'defaults with a balance of £0' do
@@ -30,10 +31,7 @@ describe Oystercard do
 
   describe '#touch_in' do
     it { is_expected.to respond_to (:touch_in) }
-    # it 'toggles #in_journey? to true' do 
-    #   subject.top_up(10)
-    #   expect(subject.touch_in(mockEntryStation)).to eq true
-    # end
+    
     it 'denies #touch_in when @balance < MIN.FARE' do
       expect { subject.touch_in(mockEntryStation) }.to raise_error 'Error - insufficient funds'
     end
@@ -42,18 +40,29 @@ describe Oystercard do
       subject.touch_in(mockEntryStation)
       expect(subject.entry_station).to eq mockEntryStation
     end
+    it 'adds entry_station to @journey_log hash' do
+      subject.top_up(10)
+      subject.touch_in(mockEntryStation)
+      expect(subject.journey_log).to include({"Entry" => mockEntryStation}) 
+    end
   end
 
   describe '#touch_out' do 
     it 'deducts correct fare from balance' do
-      expect { subject.touch_out }.to change { subject.balance }.by(-Oystercard::MINIMUM_FARE)
+      expect { subject.touch_out(mockExitStation) }.to change { subject.balance }.by(-Oystercard::MINIMUM_FARE)
     end
     it 'resets @entry_station to nil' do 
       subject.top_up(10)
       subject.touch_in(mockEntryStation)
-      subject.touch_out
+      subject.touch_out(mockExitStation)
       expect(subject.entry_station).to be nil 
-  end
+    end
+    it 'adds exit_station to @journey_log hash' do
+      subject.top_up(10)
+      subject.touch_in(mockEntryStation)
+      subject.touch_out(mockExitStation)
+      expect(subject.journey_log).to include({"Exit" => mockExitStation}) 
+    end
 end
 
   describe '#in_journey?' do 
@@ -62,7 +71,7 @@ end
       expect(subject.in_journey?).to eq true 
     end
     it 'tracks card status after #touch_out' do 
-      subject.touch_out # Ask Mark about spies. 
+      subject.touch_out(mockExitStation) # Ask Mark about spies. 
       expect(subject.in_journey?).to eq false
     end
   end

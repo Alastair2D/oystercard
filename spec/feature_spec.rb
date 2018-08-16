@@ -33,5 +33,5 @@ def touch_in
 end
 
 def deducts_correct_fare_on_touch_out
-    expect { @o1.touch_out }.to change { @o1.balance }.by(-Oystercard::MINIMUM_FARE)
+    expect { @o1.touch_out('station') }.to change { @o1.balance }.by(-Oystercard::MINIMUM_FARE)
 end
