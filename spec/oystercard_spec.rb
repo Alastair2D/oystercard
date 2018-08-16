@@ -43,7 +43,7 @@ describe Oystercard do
     it 'adds entry_station to @journey_log hash' do
       subject.top_up(10)
       subject.touch_in(mockEntryStation)
-      expect(subject.journey_log).to include({"Entry" => mockEntryStation}) 
+      expect(subject.current_journey).to include({"Entry" => mockEntryStation}) 
     end
   end
 
@@ -57,11 +57,11 @@ describe Oystercard do
       subject.touch_out(mockExitStation)
       expect(subject.entry_station).to be nil 
     end
-    it 'adds exit_station to @journey_log hash' do
+    it 'adds exit_station to @current_journey hash' do
       subject.top_up(10)
       subject.touch_in(mockEntryStation)
       subject.touch_out(mockExitStation)
-      expect(subject.journey_log).to include({"Exit" => mockExitStation}) 
+      expect(subject.current_journey).to include({"Exit" => mockExitStation}) 
     end
 end
 
