@@ -1,3 +1,5 @@
+require_relative 'station'
+
 class Oystercard
 
   attr_reader :balance, :in_journey, :entry_station, :journey_log
@@ -9,6 +11,7 @@ MAXIMUM_BALANCE = 90
     @balance = balance
     @in_journey = in_journey
     @entry_station = nil
+    @exit_station = nil
     @journey_log = {}
   end
 
@@ -31,6 +34,7 @@ MAXIMUM_BALANCE = 90
     @balance -= MINIMUM_FARE
     @journey_log["Exit"] = station
     @entry_station = nil
+    @exit_station
   end
 
   private
