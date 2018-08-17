@@ -2,7 +2,7 @@ require './lib/oystercard'
 
 describe "Oystercard features tests" do 
 
-    it 'as a user, I want to be able to see the balance on my car' do 
+    it 'as a user, I want to be able to see the balance on my card' do 
         create_new_card
         card_shows_balance
     end

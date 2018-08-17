@@ -1,8 +1,8 @@
-require 'journeys'
+require 'history'
 
-describe Journeys do
+describe History do
   
-  subject(:journeys) { Journeys.new }
+  subject(:history) { History.new }
   let(:mockCard) { double :oystercard }
   let(:mockEntryStation) { double :entrystation }
   let(:mockExitStation) { double :exitstation }
