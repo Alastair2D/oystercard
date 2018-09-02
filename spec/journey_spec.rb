@@ -13,7 +13,6 @@ let(:mockEntryStation) { double :station }
 
     describe '#start' do 
         it 'adds entry station to @journey hash' do 
-            
             expect(subject.start(mockEntryStation)).to eq(start: mockEntryStation)
         end
     end

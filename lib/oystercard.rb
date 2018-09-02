@@ -30,6 +30,7 @@ MAXIMUM_BALANCE = 90
     fail 'Error - insufficient funds' if balance < MINIMUM_FARE
     @entry_station = station
     @current_journey["Entry"] = station
+    @entry_station
   end
 
   def touch_out(station)
